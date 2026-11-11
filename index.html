@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f97316">
+<meta name="description" content="ExpressGo — restaurantes, supermercados e lojas entregues em Lisboa.">
+<title>ExpressGo — Lisboa</title>
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root{--orange:#f97316;--ink:#171717;--muted:#737373;--line:#eee;--bg:#fafafa;--white:#fff;--green:#15803d}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select{font:inherit}button{cursor:pointer}.top{background:#171717;color:white;padding:10px 5%;font-size:13px;text-align:center}
+header{background:white;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.nav{max-width:1120px;margin:auto;padding:14px 20px;display:flex;align-items:center;gap:18px}
+.brand{display:flex;align-items:center;gap:9px;font-size:23px;font-weight:900;letter-spacing:-1px;white-space:nowrap}
+.logo{width:38px;height:38px;border-radius:12px;background:var(--orange);color:white;display:grid;place-items:center;font-size:22px}
+.location{font-size:12px;color:var(--muted);margin-left:12px}.location b{display:block;color:var(--ink);font-size:14px}
+.search{flex:1;min-width:100px}.search input{width:100%;border:1px solid var(--line);background:#f7f7f7;padding:12px 15px;border-radius:12px;outline:none}
+.cartbtn,.primary{background:var(--orange);border:0;color:white;padding:12px 17px;border-radius:12px;font-weight:750}
+.cartbtn span{background:#fff;color:var(--orange);border-radius:20px;padding:2px 7px;margin-left:5px}
+main{max-width:1120px;margin:auto;padding:25px 20px 60px}
+.hero{background:linear-gradient(115deg,#1b1b1b,#38302b);color:white;border-radius:24px;padding:34px;display:flex;justify-content:space-between;align-items:center;overflow:hidden;min-height:205px}
+.hero h1{font-size:clamp(28px,5vw,46px);line-height:1.04;letter-spacing:-1.5px;margin:0 0 12px;max-width:560px}
+.hero p{color:#ddd;margin:0 0 20px}.hero .tag{color:#ffc18e;font-size:12px;font-weight:800;letter-spacing:1.5px}
+.hero-art{font-size:95px;transform:rotate(-8deg);padding:0 28px}
+.sectionhead{display:flex;justify-content:space-between;align-items:end;margin:30px 0 14px}.sectionhead h2{margin:0;font-size:22px}.sub{color:var(--muted);font-size:13px;margin-top:4px}
+.categories{display:flex;gap:10px;overflow:auto;padding:3px 0 8px}
+.chip{border:1px solid var(--line);background:white;border-radius:30px;padding:10px 16px;white-space:nowrap;font-weight:650;color:#444}
+.chip.active{background:#fff0e5;border-color:#ffc18e;color:#c2410c}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{background:white;border:1px solid var(--line);border-radius:17px;overflow:hidden;display:flex;flex-direction:column}
+.photo{height:145px;display:grid;place-items:center;font-size:65px;background:linear-gradient(135deg,#fff0e5,#f5f5f5)}
+.cardbody{padding:14px;display:flex;flex-direction:column;flex:1}.card h3{margin:0 0 5px;font-size:16px}.meta{font-size:12px;color:var(--muted);margin-bottom:12px}
+.items{display:flex;flex-direction:column;gap:9px;margin-top:auto}.item{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid #f1f1f1;padding-top:9px;font-size:13px}
+.item strong{white-space:nowrap}.add{border:0;background:#fff0e5;color:#c2410c;border-radius:9px;padding:7px 10px;font-weight:800}
+.empty{padding:30px;text-align:center;color:var(--muted);background:white;border-radius:15px;border:1px dashed #ddd;grid-column:1/-1}
+footer{background:#171717;color:#ddd;padding:25px 20px;text-align:center;font-size:13px}
+.overlay{position:fixed;inset:0;background:#0007;z-index:10;display:none}.overlay.show{display:block}
+.drawer{position:absolute;right:0;top:0;height:100%;width:min(440px,100%);background:white;padding:22px;overflow:auto}
+.drawerhead{display:flex;justify-content:space-between;align-items:center}.x{border:0;background:#f2f2f2;border-radius:50%;width:34px;height:34px;font-size:20px}
+.cartline{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);font-size:14px}
+.qty button{border:1px solid var(--line);background:white;border-radius:7px;padding:2px 8px}
+.total{display:flex;justify-content:space-between;padding:18px 0;font-size:18px;font-weight:850}
+.field{display:flex;flex-direction:column;gap:6px;margin:12px 0}.field label{font-size:13px;font-weight:700}.field input,.field select{padding:12px;border:1px solid #ddd;border-radius:10px;width:100%;background:white}
+.note{background:#fff7ed;color:#9a3412;padding:12px;border-radius:10px;font-size:12px;line-height:1.5;margin:12px 0}
+.primary.full{width:100%;padding:14px}.mutedbtn{border:1px solid #ddd;background:white;border-radius:10px;padding:10px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#171717;color:white;padding:12px 18px;border-radius:12px;z-index:20;display:none}
+.orderok{background:#f0fdf4;color:#166534;padding:15px;border-radius:12px;margin-top:14px}
+@media(max-width:760px){.nav{flex-wrap:wrap;gap:10px}.brand{font-size:20px}.location{margin-left:auto}.search{order:3;flex-basis:100%}.hero{padding:25px}.hero-art{font-size:65px;padding:0}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.photo{height:120px}}
+@media(max-width:480px){main{padding:17px 13px 45px}.grid{grid-template-columns:1fr}.hero-art{display:none}.hero{min-height:185px}.sectionhead h2{font-size:19px}.card{display:grid;grid-template-columns:105px 1fr}.photo{height:100%;min-height:145px;font-size:48px}.cardbody{padding:12px}.nav{padding:11px 13px}}
+</style>
+</head>
+<body>
+<div class="top">🚲 Entregas em Lisboa · Uma plataforma local em construção</div>
+<header><div class="nav">
+ <div class="brand"><div class="logo">➤</div>ExpressGo</div>
+ <div class="location">Entregar em<b>Lisboa, Portugal⌄</b></div>
+ <div class="search"><input id="search" placeholder="Pesquisar restaurantes, lojas, produtos…" aria-label="Pesquisar"></div>
+ <button class="cartbtn" id="openCart">🛒 Carrinho <span id="count">0</span></button>
+</div></header>
+<main>
+<section class="hero"><div><div class="tag">EXPRESSGO · LISBOA</div><h1>O que precisa, entregue à sua porta.</h1><p>Restaurantes, supermercados e lojas num só lugar.</p><button class="primary" onclick="document.getElementById('catalog').scrollIntoView({behavior:'smooth'})">Explorar agora ↓</button></div><div class="hero-art">🛵</div></section>
+<div class="sectionhead"><div><h2>O que procura?</h2><div class="sub">Escolha uma categoria para começar</div></div></div>
+<div class="categories" id="categories">
+ <button class="chip active" data-cat="Todos">✨ Todos</button><button class="chip" data-cat="Restaurantes">🍔 Restaurantes</button><button class="chip" data-cat="Supermercados">🛒 Supermercados</button><button class="chip" data-cat="Lojas">🛍️ Lojas</button>
+</div>
+<div class="sectionhead" id="catalog"><div><h2>Comerciantes em destaque</h2><div class="sub">Catálogo de demonstração — parceiros ainda por confirmar</div></div></div>
+<div class="grid" id="grid"></div>
+</main>
+<footer><b>ExpressGo</b> · Lisboa, Portugal<br><br>Protótipo de demonstração. Os estabelecimentos e produtos apresentados são exemplos fictícios, não parceiros confirmados.<br>© 2026 ExpressGo</footer>
+
+<div class="overlay" id="overlay"><div class="drawer">
+ <div class="drawerhead"><h2>O seu carrinho</h2><button class="x" id="closeCart">×</button></div>
+ <div id="cartContents"></div>
+ <div id="checkout" style="display:none">
+  <h3>Dados de entrega</h3>
+  <div class="field"><label>Nome completo</label><input id="customer" placeholder="O seu nome"></div>
+  <div class="field"><label>Telefone</label><input id="phone" placeholder="+351 9xx xxx xxx"></div>
+  <div class="field"><label>Morada em Lisboa</label><input id="address" placeholder="Rua, número, código postal"></div>
+  <div class="field"><label>Pagamento (demonstração)</label><select id="payment"><option>Pagamento online (simulado)</option></select></div>
+  <div class="note">⚠️ O pagamento real ainda não está ativo. Não introduza dados de cartão. Esta versão apenas demonstra o fluxo da encomenda.</div>
+  <button class="primary full" id="placeOrder">Confirmar encomenda de teste</button>
+  <div id="orderResult"></div>
+ </div>
+</div></div>
+<div class="toast" id="toast"></div>
+<script>
+const merchants=[
+ {id:1,name:"Casa do Hambúrguer",cat:"Restaurantes",emoji:"🍔",meta:"Hambúrgueres · Exemplo fictício · 25–40 min",items:[["Hambúrguer clássico",9.50],["Batatas fritas",3.00],["Menu completo",13.50]]},
+ {id:2,name:"Pizzaria Lisboa",cat:"Restaurantes",emoji:"🍕",meta:"Pizza · Exemplo fictício · 30–45 min",items:[["Pizza Margherita",11.00],["Pizza Vegetariana",12.50],["Pizza de frango",13.00]]},
+ {id:3,name:"Sabores de África",cat:"Restaurantes",emoji:"🍲",meta:"Cozinha africana · Exemplo fictício · 30–50 min",items:[["Yassa de frango",12.00],["Mafé",12.50],["Arroz jollof",11.50]]},
+ {id:4,name:"Mercado Express",cat:"Supermercados",emoji:"🛒",meta:"Mercearia · Exemplo fictício · 20–35 min",items:[["Água 1,5 L",1.00],["Leite 1 L",1.20],["Arroz 1 kg",2.10]]},
+ {id:5,name:"Fruta & Frescos",cat:"Supermercados",emoji:"🍎",meta:"Frutas e legumes · Exemplo fictício · 25–40 min",items:[["Bananas 1 kg",1.80],["Maçãs 1 kg",2.40],["Tomates 1 kg",2.20]]},
+ {id:6,name:"Loja do Bairro",cat:"Lojas",emoji:"🛍️",meta:"Produtos do dia a dia · Exemplo fictício · 25–45 min",items:[["Carregador USB",8.00],["Caderno",2.50],["Guarda-chuva",7.00]]}
+];
+let category="Todos",cart=JSON.parse(localStorage.getItem("expressgo_cart")||"{}");
+const euro=n=>new Intl.NumberFormat("pt-PT",{style:"currency",currency:"EUR"}).format(n);
+function render(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const list=merchants.filter(m=>(category==="Todos"||m.cat===category)&&(m.name+" "+m.cat+" "+m.items.map(x=>x[0]).join(" ")).toLowerCase().includes(q));
+ document.getElementById("grid").innerHTML=list.length?list.map(m=>`<article class="card"><div class="photo">${m.emoji}</div><div class="cardbody"><h3>${m.name}</h3><div class="meta">${m.cat} · ${m.meta}</div><div class="items">${m.items.map((it,i)=>`<div class="item"><span>${it[0]}<br><strong>${euro(it[1])}</strong></span><button class="add" onclick="add(${m.id},${i})">+ Adicionar</button></div>`).join("")}</div></div></article>`).join(""):`<div class="empty">Não encontrámos resultados. Experimente outra pesquisa.</div>`;
+}
+function save(){localStorage.setItem("expressgo_cart",JSON.stringify(cart));updateCount()}
+function add(mid,i){const m=merchants.find(x=>x.id===mid),it=m.items[i],key=mid+"-"+i;if(cart[key])cart[key].qty++;else cart[key]={mid,i,name:it[0],price:it[1],merchant:m.name,qty:1};save();toast("Adicionado ao carrinho");}
+function updateCount(){document.getElementById("count").textContent=Object.values(cart).reduce((s,x)=>s+x.qty,0)}
+function total(){return Object.values(cart).reduce((s,x)=>s+x.price*x.qty,0)}
+function renderCart(){
+ const entries=Object.entries(cart),box=document.getElementById("cartContents"),checkout=document.getElementById("checkout");
+ if(!entries.length){box.innerHTML='<div class="empty">O carrinho está vazio.<br>Explore os comerciantes para adicionar produtos.</div>';checkout.style.display="none";return}
+ box.innerHTML=entries.map(([k,x])=>`<div class="cartline"><div><b>${x.name}</b><div class="meta">${x.merchant} · ${euro(x.price)}</div><div class="qty"><button onclick="changeQty('${k}',-1)">−</button> ${x.qty} <button onclick="changeQty('${k}',1)">+</button></div></div><b>${euro(x.price*x.qty)}</b></div>`).join("")+`<div class="total"><span>Total estimado</span><span>${euro(total())}</span></div><button class="primary full" id="goCheckout">Continuar para entrega</button>`;
+ checkout.style.display="none";document.getElementById("goCheckout").onclick=()=>{checkout.style.display="block";checkout.scrollIntoView({behavior:"smooth"})};
+}
+function changeQty(k,d){cart[k].qty+=d;if(cart[k].qty<=0)delete cart[k];save();renderCart()}
+function toast(s){const t=document.getElementById("toast");t.textContent=s;t.style.display="block";setTimeout(()=>t.style.display="none",1800)}
+document.getElementById("search").addEventListener("input",render);
+document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));b.classList.add("active");category=b.dataset.cat;render()});
+document.getElementById("openCart").onclick=()=>{renderCart();document.getElementById("overlay").classList.add("show")};
+document.getElementById("closeCart").onclick=()=>document.getElementById("overlay").classList.remove("show");
+document.getElementById("overlay").onclick=e=>{if(e.target.id==="overlay")e.currentTarget.classList.remove("show")};
+document.getElementById("placeOrder").onclick=()=>{
+ const name=document.getElementById("customer").value.trim(),phone=document.getElementById("phone").value.trim(),address=document.getElementById("address").value.trim();
+ if(!name||!phone||!address){toast("Preencha nome, telefone e morada.");return}
+ const ref="EG-"+Math.random().toString(36).slice(2,8).toUpperCase();
+ const order={id:ref,createdAt:new Date().toISOString(),customer:name,phone,address,items:Object.values(cart),total:total(),status:"Nova",payment:"Simulado"};
+ const orders=JSON.parse(localStorage.getItem("expressgo_demo_orders")||"[]");orders.unshift(order);localStorage.setItem("expressgo_demo_orders",JSON.stringify(orders));
+ document.getElementById("orderResult").innerHTML=`<div class="orderok"><b>Encomenda de teste criada!</b><br>Referência: ${ref}<br>Total: ${euro(order.total)}<br><small>Registada apenas neste navegador. Não foi efetuado qualquer pagamento nem enviada uma encomenda real.</small></div>`;
+ cart={};save();renderCart();document.getElementById("orderResult").style.display="block";
+};
+render();updateCount();
+if("serviceWorker" in navigator && location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
+</script>
+</body></html>
